@@ -12,28 +12,61 @@ namespace Registry
 	/// </summary>
 	public class PhotoStudioRegistry
 	{
-		#region Public properties
+        #region Public properties
 
-		/// <summary>
-		/// The directory where the map is installed.
-		/// </summary>
-		public static string CurrentDirectory
-		{
-			get
-			{
-				if( iCurrentDirectory == null )
-				{
-					iCurrentDirectory = GetRegistryStringValue( CurrentDirectoryKey );
-				}
+        /// <summary>
+        /// The directory containing the album.xml file
+        /// </summary>
+        public static string AlbumDirectory
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(iAlbumDirectory))
+                {
+                    iAlbumDirectory = GetRegistryStringValue(AlbumDirectoryKey);
+                }
 
-				return iCurrentDirectory;
-			}
+                return iAlbumDirectory;
+            }
 
-			set
-			{
-				SetRegistryFolderValue( CurrentDirectoryKey, value );
-			}
-		}
+            set
+            {
+                SetRegistryFolderValue(AlbumDirectoryKey, value);
+            }
+        }
+
+        /// <summary>
+        /// The most recent directory browsed in PhotoStudio
+        /// </summary>
+        public static string BrowseDirectory
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(iBrowseDirectory))
+                {
+                    iBrowseDirectory = GetRegistryStringValue(BrowseDirectoryKey);
+
+                    if (string.IsNullOrEmpty(iBrowseDirectory))
+                    {
+                        // No last browse directory: go for the album directory if we have one
+                        iBrowseDirectory = AlbumDirectory;
+                    }
+
+                    if (string.IsNullOrEmpty(iBrowseDirectory))
+                    {
+                        // No album directory either
+                        iBrowseDirectory = "C:\\";
+                    }
+                }
+
+                return iBrowseDirectory;
+            }
+
+            set
+            {
+                SetRegistryFolderValue(BrowseDirectoryKey, value);
+            }
+        }
 
         /// <summary>
         /// Size of form in pixels
@@ -226,7 +259,8 @@ namespace Registry
 		#region Private constants and variables
 
 		const string PhotoStudioRegistryPath = @"HKEY_CURRENT_USER\SOFTWARE\Steelworks\PhotoStudio";
-		const string CurrentDirectoryKey = "Current Directory";
+        const string AlbumDirectoryKey = "Album Directory";
+        const string BrowseDirectoryKey = "Browse Directory";
         const string SizeXKey = "Size X";
         const string SizeYKey = "Size Y";
         const string PositionXKey = "Position X";
@@ -234,10 +268,15 @@ namespace Registry
         const string SlideSpeedKey = "Slide Speed";
 		const string ShowCaptionsKey = "Show Captions";
 
-		/// <summary>
-		/// Current directory path.
-		/// </summary>
-		static string iCurrentDirectory;
+        /// <summary>
+        /// Album directory path.
+        /// </summary>
+        static string iAlbumDirectory;
+
+        /// <summary>
+        /// Browse directory path (PhotoStudio).
+        /// </summary>
+        static string iBrowseDirectory;
 
         /// <summary>
         /// Current size of form

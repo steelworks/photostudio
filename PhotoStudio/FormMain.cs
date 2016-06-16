@@ -1,13 +1,8 @@
-﻿using System;
+﻿using Registry;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using System.IO;
-using Registry;
+using System.Windows.Forms;
 
 namespace PhotoStudio
 {
@@ -47,7 +42,7 @@ namespace PhotoStudio
             treeView.Nodes.Add(computer);
 
             // preferredPosition corresponds to the selected directory when the program was last run
-            string preferredPosition = PhotoStudioRegistry.CurrentDirectory;
+            string preferredPosition = PhotoStudioRegistry.BrowseDirectory;
             this.Size = PhotoStudioRegistry.CurrentSize;
             this.Location = PhotoStudioRegistry.CurrentPosition;
 
@@ -290,7 +285,7 @@ namespace PhotoStudio
             }
 
             listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
-            PhotoStudioRegistry.CurrentDirectory = nodeDirInfo.FullName;
+            PhotoStudioRegistry.BrowseDirectory = nodeDirInfo.FullName;
         }
 
         private void treeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
